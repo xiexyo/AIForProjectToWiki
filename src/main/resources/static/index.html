@@ -1,0 +1,1138 @@
+<!-- src/main/resources/static/index.html -->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>源码文档生成平台</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #0f1923;
+            color: #c9d1d9;
+            min-height: 100vh;
+        }
+
+        /* ========== 顶部导航 ========== */
+        .header {
+            background: linear-gradient(135deg, #1a2332 0%, #0d1b2a 100%);
+            border-bottom: 1px solid #1e3a5f;
+            padding: 16px 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .header h1 {
+            font-size: 20px;
+            font-weight: 600;
+            color: #58a6ff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header h1 .icon {
+            font-size: 24px;
+        }
+
+        .header .version {
+            font-size: 12px;
+            color: #6e7681;
+            background: #161b22;
+            padding: 4px 10px;
+            border-radius: 12px;
+        }
+
+        /* ========== 主布局 ========== */
+        .main-container {
+            display: grid;
+            grid-template-columns: 380px 1fr;
+            grid-template-rows: 1fr;
+            height: calc(100vh - 60px);
+            gap: 0;
+        }
+
+        /* ========== 左侧面板 ========== */
+        .left-panel {
+            background: #161b22;
+            border-right: 1px solid #21262d;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .panel-section {
+            padding: 20px;
+            border-bottom: 1px solid #21262d;
+        }
+
+        .panel-section h3 {
+            font-size: 13px;
+            font-weight: 600;
+            color: #8b949e;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 14px;
+        }
+
+        /* ========== 上传区域 ========== */
+        .upload-zone {
+            border: 2px dashed #30363d;
+            border-radius: 10px;
+            padding: 30px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .upload-zone:hover {
+            border-color: #58a6ff;
+            background: rgba(88, 166, 255, 0.05);
+        }
+
+        .upload-zone.drag-over {
+            border-color: #58a6ff;
+            background: rgba(88, 166, 255, 0.1);
+            transform: scale(1.01);
+        }
+
+        .upload-zone.uploaded {
+            border-color: #3fb950;
+            background: rgba(63, 185, 80, 0.05);
+        }
+
+        .upload-zone .upload-icon {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+
+        .upload-zone .upload-text {
+            font-size: 14px;
+            color: #8b949e;
+        }
+
+        .upload-zone .upload-text strong {
+            color: #58a6ff;
+        }
+
+        .upload-zone input[type="file"] {
+            display: none;
+        }
+
+        .file-info {
+            display: none;
+            margin-top: 14px;
+            padding: 12px;
+            background: #0d1117;
+            border-radius: 8px;
+            font-size: 13px;
+        }
+
+        .file-info.show {
+            display: block;
+        }
+
+        .file-info .file-name {
+            color: #58a6ff;
+            font-weight: 600;
+            word-break: break-all;
+        }
+
+        .file-info .file-meta {
+            color: #6e7681;
+            margin-top: 4px;
+        }
+
+        /* ========== 项目信息 ========== */
+        .project-info {
+            display: none;
+            padding: 12px;
+            background: #0d1117;
+            border-radius: 8px;
+            font-size: 13px;
+            line-height: 1.8;
+        }
+
+        .project-info.show {
+            display: block;
+        }
+
+        .project-info .label {
+            color: #6e7681;
+        }
+
+        .project-info .value {
+            color: #58a6ff;
+            font-family: 'Cascadia Code', 'Fira Code', monospace;
+            font-size: 12px;
+        }
+
+        /* ========== 按钮 ========== */
+        .btn {
+            width: 100%;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #238636 0%, #2ea043 100%);
+            color: #fff;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: linear-gradient(135deg, #2ea043 0%, #3fb950 100%);
+            box-shadow: 0 4px 12px rgba(46, 160, 67, 0.3);
+        }
+
+        .btn-danger {
+            background: #da3633;
+            color: #fff;
+            margin-top: 8px;
+        }
+
+        .btn-danger:hover:not(:disabled) {
+            background: #f85149;
+        }
+
+        /* ========== 状态指示器 ========== */
+        .status-bar {
+            display: none;
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .status-bar.hidden {
+            display: none;
+        }
+
+        .status-bar.running {
+            background: rgba(88, 166, 255, 0.1);
+            border: 1px solid rgba(88, 166, 255, 0.3);
+            color: #58a6ff;
+        }
+
+        .status-bar.done {
+            background: rgba(63, 185, 80, 0.1);
+            border: 1px solid rgba(63, 185, 80, 0.3);
+            color: #3fb950;
+        }
+
+        .status-bar.error {
+            background: rgba(248, 81, 73, 0.1);
+            border: 1px solid rgba(248, 81, 73, 0.3);
+            color: #f85149;
+        }
+
+        .spinner {
+            width: 14px;
+            height: 14px;
+            border: 2px solid transparent;
+            border-top-color: currentColor;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* ========== 文件列表 ========== */
+        .file-list-section {
+            flex: 1;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            padding: 0 20px 20px 20px;
+        }
+
+        .file-list-section h3 {
+            font-size: 13px;
+            font-weight: 600;
+            color: #8b949e;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 10px;
+            padding-top: 16px;
+        }
+
+        .file-list {
+            flex: 1;
+            overflow-y: auto;
+            list-style: none;
+        }
+
+        .file-list::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .file-list::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .file-list::-webkit-scrollbar-thumb {
+            background: #30363d;
+            border-radius: 3px;
+        }
+
+        .file-list li {
+            padding: 8px 12px;
+            font-size: 13px;
+            color: #c9d1d9;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: background 0.15s;
+            font-family: 'Cascadia Code', 'Fira Code', monospace;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .file-list li:hover {
+            background: #21262d;
+        }
+
+        .file-list li.active {
+            background: rgba(88, 166, 255, 0.15);
+            color: #58a6ff;
+        }
+
+        .file-list li .file-icon {
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .file-list li .file-path {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        /* ========== 右侧区域 ========== */
+        .right-panel {
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* ========== Tab 切换 ========== */
+        .tab-bar {
+            display: flex;
+            background: #161b22;
+            border-bottom: 1px solid #21262d;
+            padding: 0 20px;
+        }
+
+        .tab-btn {
+            padding: 12px 20px;
+            font-size: 13px;
+            font-weight: 500;
+            color: #8b949e;
+            border: none;
+            background: none;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .tab-btn:hover {
+            color: #c9d1d9;
+        }
+
+        .tab-btn.active {
+            color: #58a6ff;
+            border-bottom-color: #58a6ff;
+        }
+
+        /* ========== 内容区 ========== */
+        .tab-content {
+            flex: 1;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .tab-pane {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            display: none;
+        }
+
+        .tab-pane.active {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ========== 日志面板 ========== */
+        .log-toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 20px;
+            background: #0d1117;
+            border-bottom: 1px solid #21262d;
+        }
+
+        .log-toolbar .log-stats {
+            font-size: 12px;
+            color: #6e7681;
+        }
+
+        .log-toolbar .log-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .log-toolbar button {
+            padding: 4px 12px;
+            font-size: 12px;
+            border: 1px solid #30363d;
+            background: #21262d;
+            color: #c9d1d9;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+
+        .log-toolbar button:hover {
+            background: #30363d;
+        }
+
+        .log-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 12px 20px;
+            background: #0d1117;
+            font-family: 'Cascadia Code', 'Fira Code', 'JetBrains Mono', 'SF Mono', monospace;
+            font-size: 12.5px;
+            line-height: 1.7;
+        }
+
+        .log-container::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .log-container::-webkit-scrollbar-track {
+            background: #0d1117;
+        }
+
+        .log-container::-webkit-scrollbar-thumb {
+            background: #21262d;
+            border-radius: 4px;
+        }
+
+        .log-line {
+            white-space: pre-wrap;
+            word-break: break-all;
+            padding: 1px 0;
+        }
+
+        .log-line.level-ERROR {
+            color: #f85149;
+        }
+
+        .log-line.level-WARN {
+            color: #d29922;
+        }
+
+        .log-line.level-INFO {
+            color: #8b949e;
+        }
+
+        .log-line.level-DEBUG {
+            color: #6e7681;
+        }
+
+        /* ========== 文件预览面板 ========== */
+        .preview-header {
+            padding: 10px 20px;
+            background: #0d1117;
+            border-bottom: 1px solid #21262d;
+            font-size: 13px;
+            color: #8b949e;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .preview-header .path {
+            font-family: 'Cascadia Code', 'Fira Code', monospace;
+            color: #58a6ff;
+        }
+
+        .preview-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            background: #0d1117;
+        }
+
+        .preview-body::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .preview-body::-webkit-scrollbar-track {
+            background: #0d1117;
+        }
+
+        .preview-body::-webkit-scrollbar-thumb {
+            background: #21262d;
+            border-radius: 4px;
+        }
+
+        .preview-content {
+            white-space: pre-wrap;
+            word-break: break-all;
+            font-family: 'Cascadia Code', 'Fira Code', monospace;
+            font-size: 13px;
+            line-height: 1.7;
+            color: #c9d1d9;
+        }
+
+        .preview-empty {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: #6e7681;
+            font-size: 14px;
+        }
+
+        /* ========== 进度条 ========== */
+        .progress-bar {
+            height: 3px;
+            background: #21262d;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-bar.hidden {
+            display: none;
+        }
+
+        .progress-bar .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #58a6ff, #3fb950, #58a6ff);
+            background-size: 200% 100%;
+            animation: progressAnim 2s linear infinite;
+            width: 100%;
+        }
+
+        @keyframes progressAnim {
+            0% { background-position: 0% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        /* ========== 连接状态 ========== */
+        .sse-status {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+        }
+
+        .sse-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #6e7681;
+        }
+
+        .sse-dot.connected {
+            background: #3fb950;
+            box-shadow: 0 0 6px rgba(63, 185, 80, 0.5);
+        }
+
+        .sse-dot.disconnected {
+            background: #f85149;
+        }
+
+        /* ========== 计时器 ========== */
+        .timer {
+            font-family: 'Cascadia Code', monospace;
+            font-size: 13px;
+            color: #6e7681;
+        }
+    </style>
+</head>
+<body>
+
+<!-- ========== 顶部 ========== -->
+<div class="header">
+    <h1>
+        <span class="icon">📄</span>
+        源码文档生成平台
+    </h1>
+    <div style="display:flex; align-items:center; gap:16px;">
+        <div class="sse-status">
+            <div class="sse-dot" id="sseDot"></div>
+            <span id="sseLabel">未连接</span>
+        </div>
+        <div class="timer" id="timer"></div>
+        <span class="version">v1.0</span>
+    </div>
+</div>
+
+<!-- ========== 进度条 ========== -->
+<div class="progress-bar hidden" id="progressBar">
+    <div class="progress-fill"></div>
+</div>
+
+<!-- ========== 主区域 ========== -->
+<div class="main-container">
+
+    <!-- 左侧 -->
+    <div class="left-panel">
+
+        <!-- 上传区域 -->
+        <div class="panel-section">
+            <h3>📦 上传源码</h3>
+
+            <div class="upload-zone" id="uploadZone">
+                <div class="upload-icon">📁</div>
+                <div class="upload-text">
+                    拖拽 ZIP 到这里，或 <strong>点击选择</strong>
+                </div>
+                <input type="file" id="fileInput" accept=".zip">
+            </div>
+
+            <div class="file-info" id="fileInfo">
+                <div class="file-name" id="fileName"></div>
+                <div class="file-meta" id="fileMeta"></div>
+            </div>
+        </div>
+
+        <!-- 项目信息 & 操作 -->
+        <div class="panel-section">
+            <h3>🔧 操作</h3>
+
+            <div class="project-info" id="projectInfo">
+                <div><span class="label">项目ID：</span><span class="value" id="projectIdValue"></span></div>
+                <div><span class="label">源码路径：</span><span class="value" id="sourceDirValue"></span></div>
+            </div>
+
+            <div id="statusBar" class="status-bar hidden">
+                <div class="spinner" id="statusSpinner"></div>
+                <span id="statusText"></span>
+            </div>
+
+            <button class="btn btn-primary" id="btnGenerate" disabled>
+                🚀 开始生成文档
+            </button>
+            <button class="btn btn-danger" id="btnClean" disabled style="display:none">
+                🗑️ 清理项目
+            </button>
+        </div>
+
+        <!-- 文件列表 -->
+        <div class="file-list-section">
+            <h3>📋 生成文件</h3>
+            <ul class="file-list" id="fileList">
+                <li style="color:#6e7681; cursor:default;">暂无文件，请先生成</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- 右侧 -->
+    <div class="right-panel">
+        <div class="tab-bar">
+            <button class="tab-btn active" data-tab="logs">📟 实时日志</button>
+            <button class="tab-btn" data-tab="preview">📄 文件预览</button>
+        </div>
+
+        <div class="tab-content">
+            <!-- 日志 Tab -->
+            <div class="tab-pane active" id="tabLogs">
+                <div class="log-toolbar">
+                    <div class="log-stats">
+                        日志行数：<span id="logCount">0</span>
+                    </div>
+                    <div class="log-actions">
+                        <button id="btnAutoScroll" onclick="toggleAutoScroll()">⬇ 自动滚动: ON</button>
+                        <button onclick="clearLogs()">🗑 清空</button>
+                        <button onclick="downloadLogs()">💾 下载</button>
+                    </div>
+                </div>
+                <div class="log-container" id="logContainer"></div>
+            </div>
+
+            <!-- 预览 Tab -->
+            <div class="tab-pane" id="tabPreview">
+                <div class="preview-header">
+                    <span>当前文件：<span class="path" id="previewPath">未选择</span></span>
+                    <button onclick="copyPreview()" style="padding:4px 12px;font-size:12px;border:1px solid #30363d;background:#21262d;color:#c9d1d9;border-radius:4px;cursor:pointer;">📋 复制</button>
+                </div>
+                <div class="preview-body" id="previewBody">
+                    <div class="preview-empty">← 请从左侧文件列表选择要查看的文件</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ========== 全局状态 ==========
+    let currentProjectId = null;
+    let eventSource = null;
+    let autoScroll = true;
+    let logLineCount = 0;
+    let timerInterval = null;
+    let buildStartTime = null;
+
+    const MAX_LOG_LINES = 5000;
+
+    // ========== DOM ==========
+    const uploadZone = document.getElementById('uploadZone');
+    const fileInput = document.getElementById('fileInput');
+    const fileInfo = document.getElementById('fileInfo');
+    const fileName = document.getElementById('fileName');
+    const fileMeta = document.getElementById('fileMeta');
+    const projectInfo = document.getElementById('projectInfo');
+    const projectIdValue = document.getElementById('projectIdValue');
+    const sourceDirValue = document.getElementById('sourceDirValue');
+    const btnGenerate = document.getElementById('btnGenerate');
+    const btnClean = document.getElementById('btnClean');
+    const statusBar = document.getElementById('statusBar');
+    const statusText = document.getElementById('statusText');
+    const statusSpinner = document.getElementById('statusSpinner');
+    const progressBar = document.getElementById('progressBar');
+    const logContainer = document.getElementById('logContainer');
+    const logCount = document.getElementById('logCount');
+    const fileList = document.getElementById('fileList');
+    const sseDot = document.getElementById('sseDot');
+    const sseLabel = document.getElementById('sseLabel');
+    const timerEl = document.getElementById('timer');
+
+    // ========== 上传逻辑 ==========
+    uploadZone.addEventListener('click', () => fileInput.click());
+
+    uploadZone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        uploadZone.classList.add('drag-over');
+    });
+
+    uploadZone.addEventListener('dragleave', () => {
+        uploadZone.classList.remove('drag-over');
+    });
+
+    uploadZone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        uploadZone.classList.remove('drag-over');
+        const files = e.dataTransfer.files;
+        if (files.length > 0) {
+            handleFile(files[0]);
+        }
+    });
+
+    fileInput.addEventListener('change', () => {
+        if (fileInput.files.length > 0) {
+            handleFile(fileInput.files[0]);
+        }
+    });
+
+    async function handleFile(file) {
+        if (!file.name.toLowerCase().endsWith('.zip')) {
+            alert('请上传 ZIP 文件');
+            return;
+        }
+
+        // 显示文件信息
+        fileName.textContent = file.name;
+        fileMeta.textContent = `大小: ${formatSize(file.size)}`;
+        fileInfo.classList.add('show');
+        uploadZone.classList.add('uploaded');
+
+        appendLog('INFO', `准备上传文件: ${file.name} (${formatSize(file.size)})`);
+
+        // 上传
+        const formData = new FormData();
+        formData.append('file', file);
+
+        try {
+            btnGenerate.disabled = true;
+            setStatus('running', '正在上传...');
+
+            const resp = await fetch('/api/projects/upload', {
+                method: 'POST',
+                body: formData
+            });
+
+            if (!resp.ok) {
+                const text = await resp.text();
+                throw new Error(text);
+            }
+
+            const result = await resp.json();
+            currentProjectId = result.projectId;
+
+            projectIdValue.textContent = result.projectId;
+            sourceDirValue.textContent = result.sourceDir;
+            projectInfo.classList.add('show');
+
+            btnGenerate.disabled = false;
+            btnClean.style.display = 'block';
+            btnClean.disabled = false;
+
+            setStatus('done', '上传成功！可以开始生成文档。');
+            appendLog('INFO', `上传成功，项目ID: ${result.projectId}`);
+
+        } catch (err) {
+            setStatus('error', '上传失败: ' + err.message);
+            appendLog('ERROR', `上传失败: ${err.message}`);
+        }
+    }
+
+    // ========== 生成文档 ==========
+    btnGenerate.addEventListener('click', async () => {
+        if (!currentProjectId) return;
+
+        // 先连接 SSE
+        connectSSE();
+
+        try {
+            btnGenerate.disabled = true;
+            setStatus('running', '正在生成文档...');
+            progressBar.classList.remove('hidden');
+            startTimer();
+
+            appendLog('INFO', `开始生成文档，项目ID: ${currentProjectId}`);
+
+            const resp = await fetch(`/api/projects/${currentProjectId}/generate`, {
+                method: 'POST'
+            });
+
+            if (!resp.ok) {
+                const text = await resp.text();
+                throw new Error(text);
+            }
+
+            const result = await resp.json();
+            appendLog('INFO', `构建任务已启动: ${result.status}`);
+
+        } catch (err) {
+            setStatus('error', '启动失败: ' + err.message);
+            appendLog('ERROR', `启动失败: ${err.message}`);
+            btnGenerate.disabled = false;
+            progressBar.classList.add('hidden');
+            stopTimer();
+        }
+    });
+
+    // ========== 清理项目 ==========
+    btnClean.addEventListener('click', async () => {
+        if (!currentProjectId) return;
+        if (!confirm('确定要清理项目 ' + currentProjectId + ' 吗？')) return;
+
+        try {
+            await fetch(`/api/projects/${currentProjectId}`, { method: 'DELETE' });
+            appendLog('INFO', `项目 ${currentProjectId} 已清理`);
+
+            // 重置
+            currentProjectId = null;
+            projectInfo.classList.remove('show');
+            fileInfo.classList.remove('show');
+            uploadZone.classList.remove('uploaded');
+            btnGenerate.disabled = true;
+            btnClean.style.display = 'none';
+            fileList.innerHTML = '<li style="color:#6e7681;cursor:default;">暂无文件，请先生成</li>';
+            statusBar.classList.add('hidden');
+            progressBar.classList.add('hidden');
+            stopTimer();
+
+        } catch (err) {
+            appendLog('ERROR', `清理失败: ${err.message}`);
+        }
+    });
+
+    // ========== SSE 连接 ==========
+    function connectSSE() {
+        if (eventSource) {
+            eventSource.close();
+        }
+
+        eventSource = new EventSource('/api/projects/logs/stream');
+
+        eventSource.onopen = () => {
+            sseDot.className = 'sse-dot connected';
+            sseLabel.textContent = '已连接';
+        };
+
+        // 日志事件
+        eventSource.addEventListener('log', (e) => {
+            appendLogRaw(e.data);
+        });
+
+        // 构建完成
+        eventSource.addEventListener('build-complete', async (e) => {
+            try {
+                const result = JSON.parse(e.data);
+                setStatus('done', `生成完成！共 ${result.generatedFiles.length} 个文件。`);
+                appendLog('INFO', `🎉 文档生成完成！共 ${result.generatedFiles.length} 个文件。`);
+
+                progressBar.classList.add('hidden');
+                stopTimer();
+                btnGenerate.disabled = false;
+
+                // 刷新文件列表
+                await loadFileList();
+
+            } catch (err) {
+                appendLog('ERROR', '解析完成事件失败: ' + err.message);
+            }
+        });
+
+        // 构建失败
+        eventSource.addEventListener('build-error', (e) => {
+            setStatus('error', '生成失败: ' + e.data);
+            appendLog('ERROR', '❌ 构建失败: ' + e.data);
+            progressBar.classList.add('hidden');
+            stopTimer();
+            btnGenerate.disabled = false;
+        });
+
+        eventSource.onerror = () => {
+            sseDot.className = 'sse-dot disconnected';
+            sseLabel.textContent = '已断开';
+
+            // 3 秒后自动重连
+            setTimeout(() => {
+                if (currentProjectId) {
+                    connectSSE();
+                }
+            }, 3000);
+        };
+    }
+
+    // ========== 日志操作 ==========
+    function appendLog(level, message) {
+        const time = new Date().toLocaleTimeString('zh-CN', { hour12: false });
+        const line = `${time} ${level.padEnd(5)} ${message}`;
+        appendLogRaw(line);
+    }
+
+    function appendLogRaw(text) {
+        const div = document.createElement('div');
+        div.className = 'log-line';
+
+        // 识别日志级别
+        if (text.includes('ERROR')) {
+            div.classList.add('level-ERROR');
+        } else if (text.includes('WARN')) {
+            div.classList.add('level-WARN');
+        } else if (text.includes('DEBUG')) {
+            div.classList.add('level-DEBUG');
+        } else {
+            div.classList.add('level-INFO');
+        }
+
+        div.textContent = text;
+        logContainer.appendChild(div);
+
+        logLineCount++;
+        logCount.textContent = logLineCount;
+
+        // 超过上限删旧的
+        while (logContainer.children.length > MAX_LOG_LINES) {
+            logContainer.removeChild(logContainer.firstChild);
+        }
+
+        if (autoScroll) {
+            logContainer.scrollTop = logContainer.scrollHeight;
+        }
+    }
+
+    function clearLogs() {
+        logContainer.innerHTML = '';
+        logLineCount = 0;
+        logCount.textContent = '0';
+    }
+
+    function downloadLogs() {
+        const text = Array.from(logContainer.children)
+            .map(el => el.textContent)
+            .join('\n');
+        const blob = new Blob([text], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `docgen-logs-${new Date().toISOString().slice(0, 19)}.log`;
+        a.click();
+        URL.revokeObjectURL(url);
+    }
+
+    function toggleAutoScroll() {
+        autoScroll = !autoScroll;
+        document.getElementById('btnAutoScroll').textContent =
+            `⬇ 自动滚动: ${autoScroll ? 'ON' : 'OFF'}`;
+    }
+
+    // ========== 文件列表 ==========
+    async function loadFileList() {
+        if (!currentProjectId) return;
+
+        try {
+            const resp = await fetch(`/api/projects/${currentProjectId}/files`);
+            const files = await resp.json();
+
+            fileList.innerHTML = '';
+
+            if (files.length === 0) {
+                fileList.innerHTML = '<li style="color:#6e7681;cursor:default;">暂无文件</li>';
+                return;
+            }
+
+            files.forEach(filePath => {
+                const li = document.createElement('li');
+
+                const icon = document.createElement('span');
+                icon.className = 'file-icon';
+                icon.textContent = getFileIcon(filePath);
+
+                const pathSpan = document.createElement('span');
+                pathSpan.className = 'file-path';
+                pathSpan.textContent = filePath;
+                pathSpan.title = filePath;
+
+                li.appendChild(icon);
+                li.appendChild(pathSpan);
+
+                li.addEventListener('click', () => {
+                    // 移除其他 active
+                    fileList.querySelectorAll('li').forEach(el => el.classList.remove('active'));
+                    li.classList.add('active');
+                    loadFileContent(filePath);
+
+                    // 自动切换到预览 tab
+                    switchTab('preview');
+                });
+
+                fileList.appendChild(li);
+            });
+
+        } catch (err) {
+            appendLog('ERROR', '加载文件列表失败: ' + err.message);
+        }
+    }
+
+    async function loadFileContent(path) {
+        try {
+            const resp = await fetch(
+                `/api/projects/${currentProjectId}/file?path=${encodeURIComponent(path)}`
+            );
+            const content = await resp.text();
+
+            document.getElementById('previewPath').textContent = path;
+            document.getElementById('previewBody').innerHTML = '';
+
+            const pre = document.createElement('pre');
+            pre.className = 'preview-content';
+            pre.textContent = content;
+            document.getElementById('previewBody').appendChild(pre);
+
+        } catch (err) {
+            document.getElementById('previewBody').innerHTML =
+                `<div class="preview-empty" style="color:#f85149">加载失败: ${err.message}</div>`;
+        }
+    }
+
+    function copyPreview() {
+        const pre = document.querySelector('.preview-content');
+        if (pre) {
+            navigator.clipboard.writeText(pre.textContent).then(() => {
+                appendLog('INFO', '已复制到剪贴板');
+            });
+        }
+    }
+
+    // ========== Tab 切换 ==========
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            switchTab(btn.dataset.tab);
+        });
+    });
+
+    function switchTab(tabName) {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+
+        document.querySelector(`.tab-btn[data-tab="${tabName}"]`).classList.add('active');
+        document.getElementById(tabName === 'logs' ? 'tabLogs' : 'tabPreview').classList.add('active');
+    }
+
+    // ========== 状态 ==========
+    function setStatus(type, text) {
+        statusBar.className = `status-bar ${type}`;
+        statusBar.classList.remove('hidden');
+        statusText.textContent = text;
+        statusSpinner.style.display = type === 'running' ? 'block' : 'none';
+    }
+
+    // ========== 计时器 ==========
+    function startTimer() {
+        buildStartTime = Date.now();
+        timerEl.textContent = '00:00';
+
+        if (timerInterval) clearInterval(timerInterval);
+
+        timerInterval = setInterval(() => {
+            const elapsed = Math.floor((Date.now() - buildStartTime) / 1000);
+            const m = String(Math.floor(elapsed / 60)).padStart(2, '0');
+            const s = String(elapsed % 60).padStart(2, '0');
+            timerEl.textContent = `${m}:${s}`;
+        }, 1000);
+    }
+
+    function stopTimer() {
+        if (timerInterval) {
+            clearInterval(timerInterval);
+            timerInterval = null;
+        }
+    }
+
+    // ========== 工具函数 ==========
+    function formatSize(bytes) {
+        if (bytes < 1024) return bytes + ' B';
+        if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+        return (bytes / 1024 / 1024).toFixed(1) + ' MB';
+    }
+
+    function getFileIcon(path) {
+        if (path.endsWith('.md')) return '📝';
+        if (path.endsWith('.yaml') || path.endsWith('.yml')) return '⚙️';
+        if (path.endsWith('.json')) return '📊';
+        return '📄';
+    }
+
+    // ========== 初始化 ==========
+    appendLog('INFO', '系统就绪，请上传 ZIP 源码包开始使用。');
+</script>
+
+</body>
+</html>

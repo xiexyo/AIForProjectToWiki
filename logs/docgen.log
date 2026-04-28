@@ -152,3 +152,121 @@ java.nio.charset.MalformedInputException: Input length = 1
 2026-04-28 13:56:08.002 INFO  [http-nio-8088-exec-1] c.b.d.service.DocumentationService - 开始生成文档，projectId=e26f07ae1e47, doc=3/11, path=docs/00-system-overview/system-boundary.md
 2026-04-28 13:56:08.007 DEBUG [http-nio-8088-exec-1] c.b.d.service.DocumentationService - 文档 prompt 构建完成，projectId=e26f07ae1e47, path=docs/00-system-overview/system-boundary.md, promptChars=24952
 2026-04-28 13:56:08.008 INFO  [http-nio-8088-exec-1] c.b.d.llm.OpenAiCompatibleClient - 开始调用大模型，第 1 次尝试，model=deepseek-v31-t-yscku, promptChars=24952
+2026-04-28 15:09:54.257 INFO  [main] com.bank.docgen.DocGenApplication - Starting DocGenApplication using Java 17.0.18 with PID 22748 (D:\IDEAproject\codeToDes\target\classes started by 22724 in D:\IDEAproject\codeToDes)
+2026-04-28 15:09:54.290 DEBUG [main] com.bank.docgen.DocGenApplication - Running with Spring Boot v3.3.5, Spring v6.1.14
+2026-04-28 15:09:54.291 INFO  [main] com.bank.docgen.DocGenApplication - No active profile set, falling back to 1 default profile: "default"
+2026-04-28 15:09:57.386 INFO  [main] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8088 (http)
+2026-04-28 15:09:57.446 INFO  [main] o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8088"]
+2026-04-28 15:09:57.475 INFO  [main] o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-04-28 15:09:57.475 INFO  [main] o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.31]
+2026-04-28 15:09:57.711 INFO  [main] o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-04-28 15:09:57.712 INFO  [main] o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 3311 ms
+2026-04-28 15:09:59.179 INFO  [main] c.b.d.llm.OpenAiCompatibleClient - LLM Client 初始化完成，baseUrl=http://10.0.37.102/v1, model=deepseek-v31-t-yscku, contextWindowTokens=98304, maxTokens=8192
+2026-04-28 15:09:59.326 INFO  [main] o.s.b.a.w.s.WelcomePageHandlerMapping - Adding welcome page: class path resource [static/index.html]
+2026-04-28 15:10:00.571 INFO  [main] o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8088"]
+2026-04-28 15:10:00.649 INFO  [main] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8088 (http) with context path '/'
+2026-04-28 15:10:00.674 INFO  [main] com.bank.docgen.DocGenApplication - Started DocGenApplication in 7.837 seconds (process running for 8.782)
+2026-04-28 15:35:45.747 INFO  [http-nio-8088-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-04-28 15:35:45.748 INFO  [http-nio-8088-exec-1] o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-04-28 15:35:45.751 INFO  [http-nio-8088-exec-1] o.s.web.servlet.DispatcherServlet - Completed initialization in 2 ms
+2026-04-28 15:36:00.233 INFO  [http-nio-8088-exec-3] c.b.d.controller.ProjectController - 收到上传请求，fileName=poc-upload.zip, size=1126535
+2026-04-28 15:36:01.020 INFO  [http-nio-8088-exec-3] c.b.d.controller.ProjectController - 上传完成，projectId=b503da1ee0e7, sourceDir=D:\IDEAproject\codeToDes\workspace\b503da1ee0e7\source, outputDir=D:\IDEAproject\codeToDes\workspace\b503da1ee0e7\generated-docs
+2026-04-28 15:36:02.833 INFO  [http-nio-8088-exec-5] c.b.d.controller.ProjectController - 前端建立 SSE 日志连接
+2026-04-28 15:36:02.852 INFO  [http-nio-8088-exec-4] c.b.d.controller.ProjectController - 收到生成文档请求，projectId=b503da1ee0e7
+2026-04-28 15:36:02.867 INFO  [pool-4-thread-1] c.b.d.service.DocumentationService - 开始生成文档，projectId=b503da1ee0e7
+2026-04-28 15:36:02.871 INFO  [pool-4-thread-1] c.b.d.service.DocumentationService - 源码目录=D:\IDEAproject\codeToDes\workspace\b503da1ee0e7\source, 输出目录=D:\IDEAproject\codeToDes\workspace\b503da1ee0e7\generated-docs
+2026-04-28 15:36:02.887 INFO  [pool-4-thread-1] c.b.d.service.DocumentationService - 开始扫描源码，projectId=b503da1ee0e7
+2026-04-28 15:36:04.335 INFO  [pool-4-thread-1] c.b.d.service.DocumentationService - 源码扫描完成，projectId=b503da1ee0e7, fileCount=80, fileTreeChars=3949
+2026-04-28 15:36:04.346 INFO  [pool-4-thread-1] c.b.d.service.DocumentationService - 源码分片完成，projectId=b503da1ee0e7, chunkCount=11
+2026-04-28 15:36:04.378 INFO  [pool-4-thread-1] c.b.d.service.DocumentationService - 开始分析源码分片，projectId=b503da1ee0e7, chunk=1/11, chunkChars=36348
+2026-04-28 15:36:04.545 DEBUG [pool-4-thread-1] c.b.d.service.DocumentationService - 源码分片 prompt 构建完成，projectId=b503da1ee0e7, chunk=1/11, promptChars=41127
+2026-04-28 15:36:04.562 INFO  [pool-4-thread-1] c.b.d.llm.OpenAiCompatibleClient - 开始调用大模型，第 1 次尝试，model=deepseek-v31-t-yscku, promptChars=41127
+2026-04-28 15:36:13.109 WARN  [http-nio-8088-exec-6] o.s.w.s.m.s.DefaultHandlerExceptionResolver - Ignoring exception, response committed already: org.springframework.web.context.request.async.AsyncRequestTimeoutException
+2026-04-28 15:36:13.110 WARN  [http-nio-8088-exec-6] o.s.w.s.m.s.DefaultHandlerExceptionResolver - Resolved [org.springframework.web.context.request.async.AsyncRequestTimeoutException]
+2026-04-28 15:36:13.378 WARN  [reactor-http-nio-2] r.n.http.client.HttpClientConnect - [bd64d24e-1, L:/10.7.94.189:1625 ! R:/10.0.37.102:80] The connection observed an error
+reactor.netty.http.client.PrematureCloseException: Connection prematurely closed BEFORE response
+2026-04-28 15:36:13.391 WARN  [pool-4-thread-1] c.b.d.llm.OpenAiCompatibleClient - 大模型调用失败，第 1 次尝试，原因=Connection prematurely closed BEFORE response
+org.springframework.web.reactive.function.client.WebClientRequestException: Connection prematurely closed BEFORE response
+	at org.springframework.web.reactive.function.client.ExchangeFunctions$DefaultExchangeFunction.lambda$wrapException$9(ExchangeFunctions.java:136)
+	Suppressed: reactor.core.publisher.FluxOnAssembly$OnAssemblyException: 
+Error has been observed at the following site(s):
+	*__checkpoint ⇢ Request to POST http://10.0.37.102/v1/chat/completions [DefaultWebClient]
+Original Stack Trace:
+		at org.springframework.web.reactive.function.client.ExchangeFunctions$DefaultExchangeFunction.lambda$wrapException$9(ExchangeFunctions.java:136)
+		at reactor.core.publisher.MonoErrorSupplied.subscribe(MonoErrorSupplied.java:55)
+		at reactor.core.publisher.Mono.subscribe(Mono.java:4576)
+		at reactor.core.publisher.FluxOnErrorResume$ResumeSubscriber.onError(FluxOnErrorResume.java:103)
+		at reactor.core.publisher.FluxPeek$PeekSubscriber.onError(FluxPeek.java:222)
+		at reactor.core.publisher.FluxPeek$PeekSubscriber.onError(FluxPeek.java:222)
+		at reactor.core.publisher.FluxPeek$PeekSubscriber.onError(FluxPeek.java:222)
+		at reactor.core.publisher.MonoNext$NextSubscriber.onError(MonoNext.java:93)
+		at reactor.core.publisher.MonoFlatMapMany$FlatMapManyMain.onError(MonoFlatMapMany.java:205)
+		at reactor.core.publisher.SerializedSubscriber.onError(SerializedSubscriber.java:124)
+		at reactor.core.publisher.FluxRetryWhen$RetryWhenMainSubscriber.whenError(FluxRetryWhen.java:229)
+		at reactor.core.publisher.FluxRetryWhen$RetryWhenOtherSubscriber.onError(FluxRetryWhen.java:279)
+		at reactor.core.publisher.FluxContextWrite$ContextWriteSubscriber.onError(FluxContextWrite.java:121)
+		at reactor.core.publisher.FluxConcatMapNoPrefetch$FluxConcatMapNoPrefetchSubscriber.maybeOnError(FluxConcatMapNoPrefetch.java:327)
+		at reactor.core.publisher.FluxConcatMapNoPrefetch$FluxConcatMapNoPrefetchSubscriber.onNext(FluxConcatMapNoPrefetch.java:212)
+		at reactor.core.publisher.FluxContextWrite$ContextWriteSubscriber.onNext(FluxContextWrite.java:107)
+		at reactor.core.publisher.SinkManyEmitterProcessor.drain(SinkManyEmitterProcessor.java:476)
+		at reactor.core.publisher.SinkManyEmitterProcessor$EmitterInner.drainParent(SinkManyEmitterProcessor.java:620)
+		at reactor.core.publisher.FluxPublish$PubSubInner.request(FluxPublish.java:874)
+		at reactor.core.publisher.FluxContextWrite$ContextWriteSubscriber.request(FluxContextWrite.java:136)
+		at reactor.core.publisher.FluxConcatMapNoPrefetch$FluxConcatMapNoPrefetchSubscriber.request(FluxConcatMapNoPrefetch.java:337)
+		at reactor.core.publisher.FluxContextWrite$ContextWriteSubscriber.request(FluxContextWrite.java:136)
+		at reactor.core.publisher.Operators$DeferredSubscription.request(Operators.java:1743)
+		at reactor.core.publisher.FluxRetryWhen$RetryWhenMainSubscriber.onError(FluxRetryWhen.java:196)
+		at reactor.core.publisher.MonoCreate$DefaultMonoSink.error(MonoCreate.java:205)
+		at reactor.netty.http.client.HttpClientConnect$HttpObserver.onUncaughtException(HttpClientConnect.java:403)
+		at reactor.netty.ReactorNetty$CompositeConnectionObserver.onUncaughtException(ReactorNetty.java:709)
+		at reactor.netty.resources.DefaultPooledConnectionProvider$DisposableAcquire.onUncaughtException(DefaultPooledConnectionProvider.java:223)
+		at reactor.netty.resources.DefaultPooledConnectionProvider$PooledConnection.onUncaughtException(DefaultPooledConnectionProvider.java:476)
+		at reactor.netty.http.client.HttpClientOperations.onInboundClose(HttpClientOperations.java:325)
+		at reactor.netty.channel.ChannelOperationsHandler.channelInactive(ChannelOperationsHandler.java:73)
+		at io.netty.channel.AbstractChannelHandlerContext.invokeChannelInactive(AbstractChannelHandlerContext.java:303)
+		at io.netty.channel.AbstractChannelHandlerContext.invokeChannelInactive(AbstractChannelHandlerContext.java:281)
+		at io.netty.channel.AbstractChannelHandlerContext.fireChannelInactive(AbstractChannelHandlerContext.java:274)
+		at io.netty.channel.ChannelInboundHandlerAdapter.channelInactive(ChannelInboundHandlerAdapter.java:81)
+		at io.netty.handler.codec.http.HttpContentDecoder.channelInactive(HttpContentDecoder.java:235)
+		at io.netty.channel.AbstractChannelHandlerContext.invokeChannelInactive(AbstractChannelHandlerContext.java:303)
+		at io.netty.channel.AbstractChannelHandlerContext.invokeChannelInactive(AbstractChannelHandlerContext.java:281)
+		at io.netty.channel.AbstractChannelHandlerContext.fireChannelInactive(AbstractChannelHandlerContext.java:274)
+		at io.netty.channel.CombinedChannelDuplexHandler$DelegatingChannelHandlerContext.fireChannelInactive(CombinedChannelDuplexHandler.java:418)
+		at io.netty.handler.codec.ByteToMessageDecoder.channelInputClosed(ByteToMessageDecoder.java:412)
+		at io.netty.handler.codec.ByteToMessageDecoder.channelInactive(ByteToMessageDecoder.java:377)
+		at io.netty.handler.codec.http.HttpClientCodec$Decoder.channelInactive(HttpClientCodec.java:410)
+		at io.netty.channel.CombinedChannelDuplexHandler.channelInactive(CombinedChannelDuplexHandler.java:221)
+		at io.netty.channel.AbstractChannelHandlerContext.invokeChannelInactive(AbstractChannelHandlerContext.java:303)
+		at io.netty.channel.AbstractChannelHandlerContext.invokeChannelInactive(AbstractChannelHandlerContext.java:281)
+		at io.netty.channel.AbstractChannelHandlerContext.fireChannelInactive(AbstractChannelHandlerContext.java:274)
+		at io.netty.channel.DefaultChannelPipeline$HeadContext.channelInactive(DefaultChannelPipeline.java:1352)
+		at io.netty.channel.AbstractChannelHandlerContext.invokeChannelInactive(AbstractChannelHandlerContext.java:301)
+		at io.netty.channel.AbstractChannelHandlerContext.invokeChannelInactive(AbstractChannelHandlerContext.java:281)
+		at io.netty.channel.DefaultChannelPipeline.fireChannelInactive(DefaultChannelPipeline.java:850)
+		at io.netty.channel.AbstractChannel$AbstractUnsafe$7.run(AbstractChannel.java:811)
+		at io.netty.util.concurrent.AbstractEventExecutor.runTask(AbstractEventExecutor.java:173)
+		at io.netty.util.concurrent.AbstractEventExecutor.safeExecute$$$capture(AbstractEventExecutor.java:166)
+		at io.netty.util.concurrent.AbstractEventExecutor.safeExecute(AbstractEventExecutor.java)
+		at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasksFrom(SingleThreadEventExecutor.java:428)
+		at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:377)
+		at io.netty.util.concurrent.SingleThreadEventExecutor.confirmShutdown(SingleThreadEventExecutor.java:763)
+		at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:596)
+		at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:997)
+		at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+		at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+		at java.base/java.lang.Thread.run(Thread.java:842)
+	Suppressed: java.lang.Exception: #block terminated with an error
+		at reactor.core.publisher.BlockingSingleSubscriber.blockingGet(BlockingSingleSubscriber.java:146)
+		at reactor.core.publisher.Mono.block(Mono.java:1807)
+		at com.bank.docgen.llm.OpenAiCompatibleClient.doChat(OpenAiCompatibleClient.java:100)
+		at com.bank.docgen.llm.OpenAiCompatibleClient.chat(OpenAiCompatibleClient.java:57)
+		at com.bank.docgen.service.DocumentationService.generate(DocumentationService.java:96)
+		at com.bank.docgen.controller.ProjectController.lambda$generate$0(ProjectController.java:96)
+		at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+		at java.base/java.util.concurrent.FutureTask.run$$$capture(FutureTask.java:264)
+		at java.base/java.util.concurrent.FutureTask.run(FutureTask.java)
+		at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+		at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+		at java.base/java.lang.Thread.run(Thread.java:842)
+Caused by: reactor.netty.http.client.PrematureCloseException: Connection prematurely closed BEFORE response
+2026-04-28 15:36:14.406 INFO  [pool-4-thread-1] c.b.d.llm.OpenAiCompatibleClient - 开始调用大模型，第 2 次尝试，model=deepseek-v31-t-yscku, promptChars=41127

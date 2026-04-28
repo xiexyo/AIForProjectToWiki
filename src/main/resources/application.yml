@@ -61,16 +61,10 @@ docgen:
     doc-knowledge-chars: 70000
 
 
+# application.yml 中只保留这些 logging 配置（其他不变）
 logging:
   level:
     root: INFO
     com.bank.docgen: DEBUG
     org.springframework.web: INFO
     reactor.netty.http.client: INFO
-
-  file:
-    name: ./logs/docgen.log
-
-  pattern:
-    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] %logger{36} - %msg%n"
-    file: "%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] %logger{36} - %msg%n"
