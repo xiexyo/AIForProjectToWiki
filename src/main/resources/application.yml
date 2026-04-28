@@ -1,0 +1,76 @@
+server:
+  port: 8088
+
+spring:
+  servlet:
+    multipart:
+      max-file-size: 500MB
+      max-request-size: 500MB
+
+docgen:
+  workspace: ./workspace
+
+  llm:
+    # 你们内网 GLM 4.7 OpenAI 兼容接口地址
+    # 例如：http://192.168.x.x:8000/v1
+    base-url:  http://10.0.37.102/v1
+
+    # 内网如果不需要鉴权，可以为空
+    api-key: sk-N2sBmN9IznzOKAjwBe8176FaB86e442296Ac100fD90eF0C8
+
+    # 根据你们模型服务实际 model 名称填写
+    model: deepseek-v31-t-yscku
+
+    temperature: 0.1
+    timeout-seconds: 300
+
+    # 单次最大输出 token，不要设置太大，否则容易挤占输入上下文
+    max-tokens: 8192
+
+    # 这里一定要和你们推理服务 max_model_len 对齐
+    # 如果你们是 32K，就填 32768
+    # 如果是 64K，就填 65536
+    # 如果是 128K，就填 131072
+    context-window-tokens: 98304
+
+    # 给输出预留 token
+    reserved-output-tokens: 8192
+
+    # 安全余量
+    safety-tokens: 8192
+
+    # 字符/token 粗略估算。
+    # 中文 + 代码混合建议保守设置 1.2。
+    chars-per-token: 1.2
+
+  scan:
+    # 单文件最大读取字符数，避免超大 XML/SQL/Java 直接撑爆上下文
+    max-file-chars: 20000
+
+    # 单个源码 chunk 字符数，会再结合 PromptBudget 做安全限制
+    chunk-chars: 50000
+
+  generation:
+    # 每个 chunk 分析摘要最大字符数
+    max-summary-chars: 9000
+
+    # 每轮合并摘要的输入字符上限
+    merge-input-chars: 70000
+
+    # 生成单个文档时使用的知识字符上限
+    doc-knowledge-chars: 70000
+
+
+logging:
+  level:
+    root: INFO
+    com.bank.docgen: DEBUG
+    org.springframework.web: INFO
+    reactor.netty.http.client: INFO
+
+  file:
+    name: ./logs/docgen.log
+
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] %logger{36} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] %logger{36} - %msg%n"
